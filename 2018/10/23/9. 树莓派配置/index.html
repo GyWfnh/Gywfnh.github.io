@@ -15,8 +15,6 @@
 <h4 id="官方系统-Raspbian："><a href="#官方系统-Raspbian：" class="headerlink" title="官方系统 Raspbian："></a>官方系统 Raspbian：</h4><p>系统烧录完成后直接运行即可。</p>
 <blockquote>
 <p>桌面版系统可以连接显示器进行操作，和Ubuntu桌面版类似。</p>
-</blockquote>
-<blockquote>
 <p>轻量版系统没有桌面，可以显示屏操作也可以直接SSH操作，看个人爱好和硬件状况。</p>
 </blockquote>
 <ol>
@@ -35,9 +33,8 @@ $ service sshd start 或  /etc/init.d/sshd start
 </code></pre><p><br></p>
 </li>
 <li><p>没有HDMI且没有网线连接时，可以手动添加WiFi配置文件</p>
-<blockquote>
-<p>将刷好 Raspbian 系统的 SD 卡用电脑读取。在 boot 分区，也就是树莓派的 /boot 目录下新建 wpa_supplicant.conf 文件，按照下面的参考格式填入内容并保存 wpa_supplicant.conf 文件。</p>
-</blockquote>
+<p> 将刷好 Raspbian 系统的 SD 卡用电脑读取。在 boot 分区，也就是树莓派的 /boot 目录下新建 wpa_supplicant.conf 文件</p>
+<p> 按照下面的参考格式填入内容并保存 wpa_supplicant.conf 文件。</p>
 <pre><code>## 开始 --
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
@@ -63,22 +60,16 @@ WiFi加密模式
 </code></pre><p><br></p>
 </li>
 </ol>
-<h4 id="CentOS系统-armv7hl版"><a href="#CentOS系统-armv7hl版" class="headerlink" title="CentOS系统 armv7hl版"></a>CentOS系统 armv7hl版</h4><blockquote>
-<p>没办法，只能连接显示器进行操作</p>
-</blockquote>
+<h4 id="CentOS系统-armv7hl版"><a href="#CentOS系统-armv7hl版" class="headerlink" title="CentOS系统 armv7hl版"></a>CentOS系统 armv7hl版</h4><p>没办法，只能连接显示器进行操作</p>
 <pre><code>扫描：nmcli d wifi
 链接：nmcli d wifi connect fenggese password &apos;meiyoumima&apos;
 删除：nmcli c del UUID号码
 连接历史UUID：nmcli c
-</code></pre><h4 id="Ubuntu系统"><a href="#Ubuntu系统" class="headerlink" title="Ubuntu系统"></a>Ubuntu系统</h4><blockquote>
-<p>目前Ubuntu官网上暂时没有3B+的系统，只能修改启动文件进行加载安装。但是本人测试时一直卡在 network service进程下，无法进入系统。就算可以进入系统，本地网卡和无线网卡也无法工作，只能单机。</p>
-</blockquote>
+</code></pre><h4 id="Ubuntu系统"><a href="#Ubuntu系统" class="headerlink" title="Ubuntu系统"></a>Ubuntu系统</h4><p>目前Ubuntu官网上暂时没有3B+的系统，只能修改启动文件进行加载安装。但是本人测试时一直卡在 network service进程下，无法进入系统。就算可以进入系统，本地网卡和无线网卡也无法工作，只能单机。</p>
 <h2 id="树莓派服务器组件安装"><a href="#树莓派服务器组件安装" class="headerlink" title="树莓派服务器组件安装"></a>树莓派服务器组件安装</h2><h4 id="JDK安装"><a href="#JDK安装" class="headerlink" title="JDK安装"></a>JDK安装</h4><p>JDK安装方式与Ubuntu桌面版类似，下载、解压、配置环境变量，操作方式通用。</p>
 <p>JDK必须选择“linux-arm32-vfp-hflt”版本。</p>
 <h4 id="Tomcat安装"><a href="#Tomcat安装" class="headerlink" title="Tomcat安装"></a>Tomcat安装</h4><p>Tomcat服务器可以直接拷贝通用版的文件，然后注意使用“**.sh”脚本进行开启和关闭。</p>
-<blockquote>
 <p>常见问题和错误</p>
-</blockquote>
 <ol>
 <li><p>提示需要安装“JAVA_HOME”环境</p>
 <pre><code>如果JDK没有配置，则需要配置JDK并设置环境变量，切记设置好以后，刷新当前环境变量。
@@ -92,9 +83,7 @@ $ chomd -R 777 apache-tomcat-***(Tomcat文件夹名称)
 </li>
 <li><p>启动报错：java.net.BindException: Permission denied <null>:80</null></p>
 <pre><code>在某些系统下只有root用户才可以访问1024以下的端口号，其余用户不能访问。因此会报错。
-</code></pre><blockquote>
-<p>解决方法：</p>
-</blockquote>
+</code></pre><p> 解决方法：</p>
 <pre><code>Tomcat服务器设置1024以上的端口号，可以正常使用。
 
 使用以下指令对端口进行重映射：
