@@ -25,6 +25,8 @@
 
 $ netstat -antulp | grep ssh  ##查看SSH是否运行
 </code></pre></li>
+</ol>
+<ol start="2">
 <li><p>设置SSH开机自动启动</p>
 <pre><code>$ vi /etc/rc.local  
 
@@ -32,6 +34,8 @@ $ netstat -antulp | grep ssh  ##查看SSH是否运行
 
 $ service sshd start 或  /etc/init.d/sshd start
 </code></pre></li>
+</ol>
+<ol start="3">
 <li><p>没有HDMI且没有网线连接时，可以手动添加WiFi配置文件</p>
 <blockquote>
 <p>将刷好 Raspbian 系统的 SD 卡用电脑读取。在 boot 分区，也就是树莓派的 /boot 目录下新建 wpa_supplicant.conf 文件，按照下面的参考格式填入内容并保存 wpa_supplicant.conf 文件。</p>
@@ -85,6 +89,8 @@ WiFi加密模式
 
 $ chomd -R 777 apache-tomcat-***(Tomcat文件夹名称)
 </code></pre></li>
+</ol>
+<ol start="2">
 <li><p>启动报错：java.net.BindException: Permission denied <null>:80</null></p>
 <pre><code>在某些系统下只有root用户才可以访问1024以下的端口号，其余用户不能访问。因此会报错。
 </code></pre><blockquote>
@@ -102,6 +108,8 @@ $ service iptables save;
 $ chkconfig --level 2345 iptables on;
 $ chkconfig --add iptables;
 </code></pre></li>
+</ol>
+<ol start="3">
 <li><p>实时查看Tomcat的logs信息</p>
 <pre><code>进入Tomcat安装目录，找到logs文件夹，执行以下命令，就会实时显示logs信息：
 
@@ -115,12 +123,18 @@ $ tail -f catalina.out
 <li><p>安装MariaDB</p>
 <pre><code>$ yum -y install mariadb mariadb-server
 </code></pre></li>
+</ol>
+<ol start="2">
 <li><p>安装完成MariaDB，首先启动MariaDB</p>
 <pre><code>$ systemctl start mariadb
 </code></pre></li>
+</ol>
+<ol start="3">
 <li><p>设置开机启动</p>
 <pre><code>$ systemctl enable mariadb
 </code></pre></li>
+</ol>
+<ol start="4">
 <li><p>接下来进行MariaDB的相关简单配置</p>
 <pre><code>$ mysql_secure_installation
 
@@ -144,6 +158,8 @@ Remove test database and access to it? [Y/n] &lt;– 是否删除test数据库�
 
 Reload privilege tables now? [Y/n] &lt;– 是否重新加载权限表，回车
 </code></pre></li>
+</ol>
+<ol start="5">
 <li><p>配置MariaDB的字符集</p>
 <blockquote>
 <p>文件/etc/my.cnf</p>
@@ -167,13 +183,18 @@ skip-character-set-client-handshake
 </blockquote>
 <p> 在[mysql]中添加</p>
 <pre><code>default-character-set=utf8
-</code></pre><p>  全部配置完成，重启mariadb</p>
-<pre><code>systemctl restart mariadb
-</code></pre><p> 之后进入MariaDB查看字符集</p>
-<pre><code>MariaDB [(none)]&gt; show variables like &quot;%character%&quot;;show variables like &quot;%collation%&quot;;
 </code></pre></li>
-<li><p>其他操作以及连接均与MySQL数据库一致。</p>
-</li>
+</ol>
+<pre><code>全部配置完成，重启mariadb
+
+    systemctl restart mariadb
+
+
+之后进入MariaDB查看字符集
+
+    MariaDB [(none)]&gt; show variables like &quot;%character%&quot;;show variables like &quot;%collation%&quot;;
+</code></pre><ol start="6">
+<li>其他操作以及连接均与MySQL数据库一致。</li>
 </ol>
 </div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2018/10/23/10. Linux下使用Vi时方向键变乱码、删除键不能使用的解决方法/" class="pre">Linux下使用Vi时方向键变乱码、删除键不能使用的解决方法</a><a href="/2018/06/16/8. Windows下MySQL解压版安装/" class="next">Windows下MySQL解压版安装</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#树莓派系统安装"><span class="toc-text">树莓派系统安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#官方系统-Raspbian："><span class="toc-text">官方系统 Raspbian：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CentOS系统-armv7hl版"><span class="toc-text">CentOS系统 armv7hl版</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Ubuntu系统"><span class="toc-text">Ubuntu系统</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#树莓派服务器组件安装"><span class="toc-text">树莓派服务器组件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#JDK安装"><span class="toc-text">JDK安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Tomcat安装"><span class="toc-text">Tomcat安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MariaDB安装"><span class="toc-text">MariaDB安装</span></a></li></ol></li></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/10/23/10. Linux下使用Vi时方向键变乱码、删除键不能使用的解决方法/">Linux下使用Vi时方向键变乱码、删除键不能使用的解决方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/23/9. 树莓派配置/">树莓派服务器配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/16/8. Windows下MySQL解压版安装/">Windows下MySQL解压版安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/19/7. CentOS 7 下配置IP、SSH、MySQL/">CentOS 7 下配置IP、SSH、MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/16/6. Ubuntu下配置SSH登录/">Ubuntu下配置SSH登录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/16/4. Ubuntu下安装jdk并配置环境变量/">Ubuntu下安装jdk并配置环境变量</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/15/5. Ubuntu下安装MySQL和基本操作/">Ubuntu下安装MySQL和基本操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/13/3. Git指令的简单有效使用/">Git指令的简单有效使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/12/2.BlueLake主题配置/">BlueLake博客主题配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/12/1. Hexo介绍和搭建/">Hexo的安装配置和搭建</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/">CentOS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Ubuntu/">Ubuntu</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/raspberry/">raspberry</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="https://www.baidu.com/" title="百度一下" target="_blank">百度一下</a><ul></ul><a href="https://weibo.com/" title="微博热点" target="_blank">微博热点</a><ul></ul><a href="https://gywfnh.github.io/" title="个人博客" target="_blank">个人博客</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">GYSG.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
 </script></body></html>
