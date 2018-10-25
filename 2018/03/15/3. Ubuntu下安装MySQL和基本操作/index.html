@@ -1,0 +1,168 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="练手来玩玩"><title>Ubuntu下安装MySQL和基本操作 | 自娱自乐</title><link rel="stylesheet" type="text/css" href="//fonts.neworld.org/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Ubuntu下安装MySQL和基本操作</h1><a id="logo" href="/.">自娱自乐</a><p class="description">自用博客搭建</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">Ubuntu下安装MySQL和基本操作</h1><div class="post-meta"><a href="/2018/03/15/3. Ubuntu下安装MySQL和基本操作/#comments" class="comment-count"></a><p><span class="date">Mar 15, 2018</span><span><a href="/categories/Ubuntu/" class="category">Ubuntu</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><h2 id="Ubuntu下安装MySQL"><a href="#Ubuntu下安装MySQL" class="headerlink" title="Ubuntu下安装MySQL"></a>Ubuntu下安装MySQL</h2><p>Ubuntu上安装MySQL最简单的方法就是使用命令进行安装。</p>
+<pre><code>$ sudo apt-get install mysql-server
+
+$ apt-get install mysql-client
+
+$ sudo apt-get install libmysqlclient-dev
+</code></pre><p>安装过程中会提示设置密码什么的，注意设置了不要忘了，安装完成之后可以使用如下命令来检查是否安装成功：</p>
+<pre><code>$ sudo netstat -tap | grep mysql
+</code></pre><p>通过命令返回的结果，如果 mysql 的socket处于 listen 状态则表示安装成功。</p>
+<p>登陆mysql数据库可以通过如下命令：</p>
+<pre><code>$ mysql -u root -p
+</code></pre><blockquote>
+<p>-u 表示选择登陆的用户名， -p 表示登陆的用户密码，上面命令输入之后会提示输入密码，此时输入密码就可以登录到mysql。</p>
+</blockquote>
+<h2 id="设置MySQL远程访问"><a href="#设置MySQL远程访问" class="headerlink" title="设置MySQL远程访问"></a>设置MySQL远程访问</h2><p>远程使用数据库客户端软件连接 MYSQL数据时，有时候会出现如下错误：</p>
+<pre><code>2003-Can’t connect to MySQL on ‘192.168.0.100’(10061)错误
+</code></pre><p>此错误类型为MySQL服务端不允许远程访问导致，此时需配置开启MySQL的远程访问。</p>
+<p>设置mysql允许远程访问，首先要找到MySQL的配置文件，一般位置在如下目录</p>
+<pre><code>/etc/mysql/mysql.conf.d/mysqld.cnf
+</code></pre><p>打开方式：</p>
+<pre><code>$ sudo gedit /etc/mysql/mysql.conf.d/mysqld.cnf
+
+// 或者使用如下方式打开配置文件
+$ sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
+</code></pre><p>然后找到这一行代码</p>
+<pre><code>bind-address = 127.0.0.1    方法一：前面添加&quot;#&quot;直接注释掉
+
+bind-address = 0.0.0.0      方法二：将 127.0.0.1 改成 0.0.0.0
+</code></pre><p>顺便修改MySQL最大允许读取数据量，以防止业务过程中报错错：</p>
+<pre><code>错误类型：Packet for query is too large(xxx &gt; 1024)
+
+修改方式：[mysqld] 下 max_allowed_packet    = 16M (设置20M左右为宜)
+</code></pre><p>修改完成后，需要重启MySQL服务器才能生效</p>
+<pre><code>$ service mysql restart             // Ubuntu 系统下
+
+$ systemctl restart mysqld.service  // centos 7 系统下
+</code></pre><h2 id="MySQL用户的添加、修改、删除和授权"><a href="#MySQL用户的添加、修改、删除和授权" class="headerlink" title="MySQL用户的添加、修改、删除和授权"></a>MySQL用户的添加、修改、删除和授权</h2><h4 id="用户添加："><a href="#用户添加：" class="headerlink" title="用户添加："></a>用户添加：</h4><pre><code>create user 用户名 identified by &apos;密码&apos;;
+
+例：create user haha identified by &apos;123456&apos;;
+</code></pre><h4 id="权限控制："><a href="#权限控制：" class="headerlink" title="权限控制："></a>权限控制：</h4><p>新创建的用户，默认情况下是没有任何权限的，因此需要给用户分配权限</p>
+<pre><code>grant 权限 on 数据库.数据表 to &apos;用户&apos;@&apos;主机名&apos;;
+
+// 例：给 haha 分配所有的权限
+grant all on *.* to &apos;haha&apos;@&apos;%&apos;;
+
+其中 *.* 表示所有的数据库和数据表均可以访问，% 表示可以任意远端IP均可通过该用户连接数据库。
+</code></pre><p>精准的控制用户的权限</p>
+<pre><code>grant 权限 on 数据库.数据表 to &apos;用户&apos;@&apos;主机名&apos;;
+
+//这个时候 haha 就具有查询d1中的tab1的权限了。
+grant select on d1.tab1 to &apos;haha&apos;@&apos;%&apos;;   
+
+再比如：
+
+mysql&gt;grant select,insert,update,delete,create,drop on d1.tab1 to haha@192.168.0.100 identified by ‘123456′;
+
+给来自192.168.0.100的用户haha分配可对数据库d1的tab1表进行select,insert,update,delete,create,drop等操作的权限，并设定口令为123456。
+</code></pre><p>如果用户在授权操作时出现如下问题：</p>
+<pre><code>ERROR 1045 (28000): Access denied for user &apos;root&apos;@&apos;%&apos; (using password: YES)
+</code></pre><p>那么这不是因为密码错误导致的，而是因为该用户没有授权其他用户的权限，因此，出现错误，授权失败。</p>
+<p>可以如下操作进行修改改用户授权权限：</p>
+<pre><code>mysql&gt; use mysql;
+
+mysql&gt; update mysql.user set Grant_priv=&apos;Y&apos; where User=&apos;root&apos; and Host=&apos;localhost&apos;;
+
+mysql&gt; flush privileges;
+</code></pre><p>刷新完成后，退出并重新登录，该用户就可以正常给其他用户进行数据库授权操作了。</p>
+<h4 id="权限撤回："><a href="#权限撤回：" class="headerlink" title="权限撤回："></a>权限撤回：</h4><pre><code>revoke 权限 on 数据库.数据表 from &apos;用户&apos;@&apos;主机名&apos;;
+
+// 收回 haha 的所有权限
+revoke all on *.* from &apos;haha&apos;@&apos;%&apos;;
+</code></pre><h4 id="密码修改：-三种方法"><a href="#密码修改：-三种方法" class="headerlink" title="密码修改：(三种方法)"></a>密码修改：(三种方法)</h4><pre><code>方法1： 用SET PASSWORD命令
+首先登录MySQL。
+格式：mysql&gt; set password for 用户名@localhost = password(‘新密码’);
+例子：mysql&gt; set password for root@localhost = password(&apos;123&apos;);
+
+方法2：用mysqladmin
+格式：mysqladmin -u用户名 -p旧密码 password 新密码
+例子：mysqladmin -uroot -p123456 password 123
+
+方法3：用UPDATE直接编辑user表
+首先登录MySQL。
+mysql&gt; use mysql;
+mysql&gt; update user set password=password(&apos;123&apos;) where user=&apos;root&apos; and host=&apos;localhost&apos;;
+mysql&gt; flush privileges; 
+</code></pre><h2 id="MySQL中root用户无法登陆"><a href="#MySQL中root用户无法登陆" class="headerlink" title="MySQL中root用户无法登陆"></a>MySQL中root用户无法登陆</h2><p>有时新安装的MySQL服务器，默认root用户未设置密码，因此无法进行正常的root用户登录操作。</p>
+<p>解决方法：</p>
+<ol>
+<li><p>命令行下 切换当前用户为root权限：</p>
+<blockquote>
+<p>$ sudo su</p>
+</blockquote>
+</li>
+<li><p>进入MySQL默认安装路径，默认位置为：/etc/mysql/</p>
+</li>
+<li><p>打开debian.cnf:</p>
+<blockquote>
+<p>$ gedit debian.cnf</p>
+</blockquote>
+</li>
+<li><p>找到其中的 user 和 password 字段，然后用此user和password进行MySQL的登录操作。</p>
+</li>
+<li><p>MySQL登录状态下，修改root用户密码：</p>
+<blockquote>
+<p>mysql&gt; use mysql;</p>
+<p>mysql&gt; UPDATE user SET authentication_string= password(‘123456’) WHERE User=’root’; </p>
+</blockquote>
+</li>
+<li><p>退出并重启MySQL即可使其设置生效。</p>
+</li>
+</ol>
+<h2 id="MySQL密码重置"><a href="#MySQL密码重置" class="headerlink" title="MySQL密码重置"></a>MySQL密码重置</h2><p>有时候我们可能会忘记或丢失数据库链接密码，因此注意修改或重置root密码的方法也是十分必要的。</p>
+<p>同样修改配置文件：</p>
+<pre><code>$ sudo vi /etc/mysql/my.cnf     在[mysqld]段中加入一行“skip-grant-tables”
+
+$ sudo service mysql restart    重启mySQL服务
+
+$ sudo mysql -u root
+</code></pre><p>然后进行用户添加、授权、修改等一系列操作之后，退出数据库管理状态。</p>
+<p>最后将刚才在配置文件中添加的代码删除或者注释，然后重启MySQL服务器，配置好新的用户名和密码，即可正常使用。</p>
+<pre><code>$ sudo vim /etc/mysql/my.cnf    把刚才加入的那一行“skip-grant-tables”注释或删除
+
+$ sudo service mysql restart    OK，搞定！
+</code></pre><h2 id="MySQL指令简单使用"><a href="#MySQL指令简单使用" class="headerlink" title="MySQL指令简单使用"></a>MySQL指令简单使用</h2><blockquote>
+<p>show databases;    查看当前的数据库。</p>
+<p>show tables;       显示当前数据库的表单</p>
+<p>use tablename;     切换到tablename数据库</p>
+<p>select * from tablename;  查看表中所有的数据和结构</p>
+</blockquote>
+<h2 id="Windows下MySQL中文乱码情况处理"><a href="#Windows下MySQL中文乱码情况处理" class="headerlink" title="Windows下MySQL中文乱码情况处理"></a>Windows下MySQL中文乱码情况处理</h2><p>如果在Windows下使用MySQL时，出现中文乱码的情况，可以进行如下设置：</p>
+<ol>
+<li><p>在安装目录（或者是ProgramData目录下的MySQL安装目录）下，找到my.ini，设置为</p>
+<blockquote>
+<p>character-set-server=utf8</p>
+</blockquote>
+</li>
+<li><p>通过代码设置，显示出来所有的设置项目。把其中的非UTF8的编码都设置成utf8：</p>
+<blockquote>
+<p>show VARIABLES like ‘character_%’;</p>
+<p>set character_set_server=utf8; </p>
+</blockquote>
+</li>
+<li><p>如果在Java端通信数据的时候发生了乱码，设置response的统一字符编码即可：</p>
+<blockquote>
+<p>response.setCharacterEncoding(“utf-8”); </p>
+</blockquote>
+</li>
+</ol>
+<h2 id="MySQL卸载和删除"><a href="#MySQL卸载和删除" class="headerlink" title="MySQL卸载和删除"></a>MySQL卸载和删除</h2><p>命令apt-get删除mysql</p>
+<pre><code>$ sudo apt-get remove --purge mysql-\*  　　
+</code></pre><p>手动删除mysql剩余文件 </p>
+<pre><code>$ sudo find / -name mysql -print
+</code></pre><p>显示出所有的含有mysql文件名的路径，如下：　　</p>
+<pre><code>/var/lib/mysql  
+/var/lib/mysql/mysql  
+/var/log/mysql  
+/usr/bin/mysql  
+/usr/lib/mysql  
+/usr/share/mysql  
+/etc/mysql  
+/etc/init.d/mysql
+</code></pre><p>接下来一一删除：执行命令</p>
+<pre><code>$ sudo rm -rf /ect/init.d/mysql
+</code></pre><p>直到全部删除。</p>
+<p>如果想要重新安装，那么重新执行全新安装的步骤即可。过程中如果报错，可忽略，然后重新执行一次安装代码。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>在实际使用中，可能还会出现一些其它的意想不到的错误，本文只是总结了本人在测试环境和实际项目(云服务器)中遇到的一些问题，可能也非典型问题，仅供参考。</p>
+</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2018/03/16/4. Ubuntu下安装jdk并配置环境变量/" class="pre">Ubuntu下安装jdk并配置环境变量</a><a href="/2018/03/13/2. Git指令的简单有效使用/" class="next">Git指令的简单有效使用</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Ubuntu下安装MySQL"><span class="toc-text">Ubuntu下安装MySQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置MySQL远程访问"><span class="toc-text">设置MySQL远程访问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL用户的添加、修改、删除和授权"><span class="toc-text">MySQL用户的添加、修改、删除和授权</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#用户添加："><span class="toc-text">用户添加：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#权限控制："><span class="toc-text">权限控制：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#权限撤回："><span class="toc-text">权限撤回：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#密码修改：-三种方法"><span class="toc-text">密码修改：(三种方法)</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL中root用户无法登陆"><span class="toc-text">MySQL中root用户无法登陆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL密码重置"><span class="toc-text">MySQL密码重置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL指令简单使用"><span class="toc-text">MySQL指令简单使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows下MySQL中文乱码情况处理"><span class="toc-text">Windows下MySQL中文乱码情况处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL卸载和删除"><span class="toc-text">MySQL卸载和删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-text">结语</span></a></li></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/10/25/7. Windows下MySQL解压版安装/">7. Windows下MySQL解压版安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/25/hello-world/">Hello World</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/23/9. Linux下使用Vi时方向键变乱码、删除键不能使用的解决方法/">Linux下使用Vi时方向键变乱码、删除键不能使用的解决方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/23/8. 树莓派配置/">树莓派服务器配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/19/6. CentOS 7 下配置IP、SSH、MySQL/">CentOS 7 下配置IP、SSH、MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/16/5. Ubuntu下配置SSH登录/">Ubuntu下配置SSH登录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/16/4. Ubuntu下安装jdk并配置环境变量/">Ubuntu下安装jdk并配置环境变量</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/15/3. Ubuntu下安装MySQL和基本操作/">Ubuntu下安装MySQL和基本操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/13/2. Git指令的简单有效使用/">Git指令的简单有效使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/12/1. Hexo介绍和搭建/">Hexo的安装配置和搭建</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/">CentOS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Ubuntu/">Ubuntu</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/raspberry/">raspberry</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="https://www.baidu.com/" title="百度一下" target="_blank">百度一下</a><ul></ul><a href="https://weibo.com/" title="微博热点" target="_blank">微博热点</a><ul></ul><a href="https://gywfnh.github.io/" title="个人博客" target="_blank">个人博客</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">GYSG.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

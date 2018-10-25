@@ -1,0 +1,278 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="练手来玩玩"><title>Hexo的安装配置和搭建 | 自娱自乐</title><link rel="stylesheet" type="text/css" href="//fonts.neworld.org/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Hexo的安装配置和搭建</h1><a id="logo" href="/.">自娱自乐</a><p class="description">自用博客搭建</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">Hexo的安装配置和搭建</h1><div class="post-meta"><a href="/2018/03/12/1. Hexo介绍和搭建/#comments" class="comment-count"></a><p><span class="date">Mar 12, 2018</span><span><a href="/categories/Hexo/" class="category">Hexo</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><h2 id="Hexo概述"><a href="#Hexo概述" class="headerlink" title="Hexo概述"></a>Hexo概述</h2><p>Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装 Hexo 相当简单。然而在安装前，您必须检查电脑中是否已安装下列应用程序：</p>
+<ul>
+<li>Node.js</li>
+<li>Git</li>
+</ul>
+<p>如果您的电脑中已经安装上述必备程序，那么恭喜您！接下来只需要使用 npm 即可完成 Hexo 的安装。</p>
+<blockquote>
+<p>$ npm install -g hexo-cli</p>
+</blockquote>
+<p>如果您的电脑中尚未安装所需要的程序，请根据以下安装指示完成安装。</p>
+<blockquote>
+<h2 id="Mac-用户"><a href="#Mac-用户" class="headerlink" title="Mac 用户"></a>Mac 用户</h2><p>您在编译时可能会遇到问题，请先到 App Store 安装 Xcode，Xcode 完成后，启动并进入 Preferences -&gt; Download -&gt; Command Line Tools -&gt; Install 安装命令行工具。</p>
+</blockquote>
+<h2 id="安装-Git"><a href="#安装-Git" class="headerlink" title="安装 Git"></a>安装 Git</h2><ul>
+<li>Windows：下载并安装 git.</li>
+<li>Mac：使用 Homebrew, MacPorts ：brew install git;或下载 安装程序 安装。</li>
+<li>Linux (Ubuntu, Debian)：sudo apt-get install git-core</li>
+<li>Linux (Fedora, Red Hat, CentOS)：sudo yum install git-core</li>
+</ul>
+<blockquote>
+<h2 id="Windows-用户"><a href="#Windows-用户" class="headerlink" title="Windows 用户"></a>Windows 用户</h2><p>下载git for windows会比较缓慢，请耐心等待一下。或者可以去第三方应用商店下载。</p>
+</blockquote>
+<h2 id="安装-Node-js"><a href="#安装-Node-js" class="headerlink" title="安装 Node.js"></a>安装 Node.js</h2><p>安装 Node.js 的最佳方式是使用 nvm。</p>
+<blockquote>
+<p>cURL:</p>
+<p>$ curl <a href="https://raw.github.com/creationix/nvm/master/install.sh" target="_blank" rel="noopener">https://raw.github.com/creationix/nvm/master/install.sh</a> | sh</p>
+</blockquote>
+<blockquote>
+<p>Wget:</p>
+<p>$ wget -qO- <a href="https://raw.github.com/creationix/nvm/master/install.sh" target="_blank" rel="noopener">https://raw.github.com/creationix/nvm/master/install.sh</a> | sh</p>
+<p>或者</p>
+<p>$ wget -qO- <a href="https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh" target="_blank" rel="noopener">https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh</a> | bash</p>
+</blockquote>
+<p>安装完成后，重启终端并执行下列命令即可安装 Node.js。</p>
+<blockquote>
+<p>$ nvm install stable</p>
+</blockquote>
+<p>Windows 用户</p>
+<blockquote>
+<p>对于windows用户来说，建议使用安装程序进行安装。安装时，请勾选Add to PATH选项。</p>
+<p>另外，您也可以使用Git Bash，这是git for windows自带的一组程序，提供了Linux风格的shell，在该环境下，您可以直接用上面提到的命令来安装Node.js。打开它的方法很简单，在任意位置单击右键，选择“Git Bash Here”即可。</p>
+<p>由于Hexo的很多操作都涉及到命令行，您可以考虑始终使用Git Bash来进行操作。</p>
+</blockquote>
+<h2 id="安装-Hexo"><a href="#安装-Hexo" class="headerlink" title="安装 Hexo"></a>安装 Hexo</h2><p>所有必备的应用程序安装完成后，即可使用 npm 安装 Hexo。</p>
+<blockquote>
+<p>$ npm install -g hexo-cli</p>
+</blockquote>
+<h2 id="Hexo初始化"><a href="#Hexo初始化" class="headerlink" title="Hexo初始化"></a>Hexo初始化</h2><p>安装 Hexo 完成后，请执行下列命令，Hexo 将会在指定文件夹中新建所需要的文件。</p>
+<blockquote>
+<p>$ hexo init <folder></folder></p>
+<p>$ cd <folder></folder></p>
+<p>$ npm install</p>
+</blockquote>
+<p>新建完成后，指定文件夹的目录如下：</p>
+<pre><code>.
+├── _config.yml
+├── package.json
+├── scaffolds
+├── source
+|   ├── _drafts
+|   └── _posts
+└── themes
+</code></pre><p>_config.yml</p>
+<blockquote>
+<p>网站的 配置 信息，您可以在此配置大部分的参数。</p>
+</blockquote>
+<p>package.json</p>
+<blockquote>
+<p>应用程序的信息。EJS, Stylus 和 Markdown renderer 已默认安装，您可以自由移除。</p>
+</blockquote>
+<p>scaffolds</p>
+<blockquote>
+<p>模版 文件夹。当您新建文章时，Hexo 会根据 scaffold 来建立文件。</p>
+</blockquote>
+<blockquote>
+<p>Hexo的模板是指在新建的markdown文件中默认填充的内容。例如，如果您修改scaffold/post.md中的Front-matter内容，那么每次新建一篇文章时都会包含这个修改。</p>
+</blockquote>
+<p>source</p>
+<blockquote>
+<p>资源文件夹是存放用户资源的地方。除 _posts 文件夹之外，开头命名为 _ (下划线)的文件 / 文件夹和隐藏的文件将会被忽略。</p>
+<p>Markdown 和 HTML 文件会被解析并放到 public 文件夹，而其他文件会被拷贝过去。</p>
+</blockquote>
+<p>themes</p>
+<blockquote>
+<p>主题 文件夹。Hexo 会根据主题来生成静态页面。</p>
+</blockquote>
+<p>更详细介绍请参考<a href="http://https://hexo.io/zh-cn/docs/configuration.html" target="_blank" rel="noopener">此处</a>。</p>
+<h2 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h2><p>hexo-server</p>
+<blockquote>
+<p>Hexo 3.0 把服务器独立成了个别模块，您必须先安装 hexo-server 才能使用。</p>
+</blockquote>
+<blockquote>
+<p>$ npm install hexo-server –save</p>
+</blockquote>
+<p>安装完成后，输入下面的命令以启动服务器</p>
+<blockquote>
+<p>$ hexo server</p>
+</blockquote>
+<p>您的网站会在 <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a> 下启动。在服务器启动期间，Hexo 会监视文件变动并自动更新，您无须重启服务器。</p>
+<p>如果您想要更改端口，或是在执行时遇到了 EADDRINUSE 错误，可以在执行时使用 -p 选项指定其他端口，如下：</p>
+<blockquote>
+<p>$ hexo server -p 5000</p>
+</blockquote>
+<p>静态模式</p>
+<p>在静态模式下，服务器只处理 public 文件夹内的文件，而不会处理文件变动，在执行时，您应该先自行执行 hexo generate，此模式通常用于生产环境（production mode）下。</p>
+<blockquote>
+<p>$ hexo server -s</p>
+</blockquote>
+<p>自定义 IP</p>
+<blockquote>
+<p>服务器默认运行在 0.0.0.0，您可以覆盖默认的 IP 设置，如下：</p>
+</blockquote>
+<blockquote>
+<p>$ hexo server -i 192.168.1.1</p>
+</blockquote>
+<p>指定这个参数后，您就只能通过该IP才能访问站点。如果您指定一个局域网IP作为-i参数的值，那么就无法通过公网来访问站点。</p>
+<h2 id="生成文件"><a href="#生成文件" class="headerlink" title="生成文件"></a>生成文件</h2><p>使用 Hexo 生成静态文件快速而且简单。</p>
+<blockquote>
+<p>$ hexo generate</p>
+</blockquote>
+<p>监视文件变动</p>
+<blockquote>
+<p>Hexo 能够监视文件变动并立即重新生成静态文件，在生成时会比对文件的 SHA1 checksum，只有变动的文件才会写入。</p>
+</blockquote>
+<blockquote>
+<p>$ hexo generate –watch</p>
+</blockquote>
+<p>完成后部署</p>
+<blockquote>
+<p>您可执行下列的其中一个命令，让 Hexo 在生成完毕后自动部署网站，两个命令的作用是相同的。</p>
+</blockquote>
+<blockquote>
+<p>$ hexo generate –deploy</p>
+<p>$ hexo deploy –generate</p>
+</blockquote>
+<p>简写</p>
+<blockquote>
+<p>上面两个命令可以简写为</p>
+<p>$ hexo g -d</p>
+<p>$ hexo d -g</p>
+</blockquote>
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><p>Hexo 提供了快速方便的一键部署功能，让您只需一条命令就能将网站部署到服务器上。</p>
+<blockquote>
+<p>$ hexo deploy</p>
+</blockquote>
+<p>在开始之前，您必须先在 _config.yml 中修改参数，一个正确的部署配置中至少要有 type 参数，例如：</p>
+<pre><code>deploy:
+  type: git
+</code></pre><p>您可同时使用多个 deployer，Hexo 会依照顺序执行每个 deployer。</p>
+<pre><code>deploy:
+- type: git
+  repo:
+- type: heroku
+  repo:
+</code></pre><blockquote>
+<p>缩进</p>
+<p>YAML依靠缩进来确定元素间的从属关系。因此，请确保每个deployer的缩进长度相同，并且使用空格缩进。</p>
+</blockquote>
+<p>Git</p>
+<blockquote>
+<p>安装 hexo-deployer-git。</p>
+</blockquote>
+<pre><code>$ npm install hexo-deployer-git --save
+</code></pre><blockquote>
+<p>修改配置。</p>
+</blockquote>
+<pre><code>deploy:
+  type: git
+  repo: &lt;repository url&gt;
+  branch: [branch]
+  message: [message]
+
+参数            描述
+repo         库（Repository）地址
+branch         分支名称。如果您使用的是 GitHub 或 GitCafe 的话，程序会尝试自动检测。
+message     自定义提交信息 (默认为 Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }})
+</code></pre><p>Heroku</p>
+<blockquote>
+<p>安装 hexo-deployer-heroku。</p>
+</blockquote>
+<pre><code>$ npm install hexo-deployer-heroku --save
+</code></pre><blockquote>
+<p>修改配置。</p>
+</blockquote>
+<pre><code>deploy:
+  type: heroku
+  repo: &lt;repository url&gt;
+  message: [message]
+
+参数             描述
+repo         Heroku 库（Repository）地址
+message     自定提交信息 (默认为 Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }})
+</code></pre><p>Rsync</p>
+<blockquote>
+<p>安装 hexo-deployer-rsync。</p>
+</blockquote>
+<pre><code>$ npm install hexo-deployer-rsync --save
+</code></pre><blockquote>
+<p>修改配置。</p>
+</blockquote>
+<pre><code>deploy:
+  type: rsync
+  host: &lt;host&gt;
+  user: &lt;user&gt;
+  root: &lt;root&gt;
+  port: [port]
+  delete: [true|false]
+  verbose: [true|false]
+  ignore_errors: [true|false]
+
+参数            描述                     默认值
+host         远程主机的地址     
+user         使用者名称     
+root         远程主机的根目录     
+port         端口     22
+delete         删除远程主机上的旧文件     true
+verbose     显示调试信息                 true
+ignore_errors     忽略错误             false
+</code></pre><blockquote>
+<p>rsync部署模块的工作方式</p>
+</blockquote>
+<pre><code>需要注意的是，要求您提供的实际上是一个能通过SSH登陆远程主机的Linux用户。Hexo会自动处理关于rsync使用的一切操作。因此，您需要在远程主机上为您的Hexo站点建立一个用户，并允许其通过SSH登陆。不过，这里的port，的确是指rsync监听的端口，请确保防火墙打开了该端口。
+</code></pre><p>OpenShift</p>
+<blockquote>
+<p>安装 hexo-deployer-openshift。</p>
+</blockquote>
+<pre><code>$ npm install hexo-deployer-openshift --save
+</code></pre><blockquote>
+<p>修改配置。</p>
+</blockquote>
+<pre><code>deploy:
+  type: openshift
+  repo: &lt;repository url&gt;
+  message: [message]
+
+参数            描述
+repo         OpenShift 库（Repository）地址
+message     自定提交信息 (默认为 Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }})
+</code></pre><p>FTPSync</p>
+<blockquote>
+<p>安装 hexo-deployer-ftpsync。</p>
+</blockquote>
+<pre><code>$ npm install hexo-deployer-ftpsync --save
+</code></pre><blockquote>
+<p>修改配置。</p>
+</blockquote>
+<pre><code>deploy:
+  type: ftpsync
+  host: &lt;host&gt;
+  user: &lt;user&gt;
+  pass: &lt;password&gt;
+  remote: [remote]
+  port: [port]
+  ignore: [ignore]
+  connections: [connections]
+  verbose: [true|false]
+
+参数            描述                     默认值
+host         远程主机的地址     
+user         使用者名称     
+pass         密码     
+remote         远程主机的根目录             /
+port         端口                        21
+ignore         忽略的文件或目录     
+connections     使用的连接数             1
+verbose     显示调试信息                 false
+</code></pre><blockquote>
+<p>FTP部署可能出现的问题</p>
+</blockquote>
+<pre><code>您可能需要预先通过其他方式将所有文件上传到远程主机中。否则初次使用ftpsync插件就可能出现报错。另外，由于FTP协议的特征，它每传送一个文件就需要一次握手，相对速度较慢。
+</code></pre><p>其他方法</p>
+<blockquote>
+<p>Hexo 生成的所有文件都放在 public 文件夹中，您可以将它们复制到您喜欢的地方。</p>
+</blockquote>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>更多详细配置请移步此处：<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">https://hexo.io/zh-cn/docs/</a></p>
+</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2018/03/13/2. Git指令的简单有效使用/" class="pre">Git指令的简单有效使用</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo概述"><span class="toc-text">Hexo概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mac-用户"><span class="toc-text">Mac 用户</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装-Git"><span class="toc-text">安装 Git</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows-用户"><span class="toc-text">Windows 用户</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装-Node-js"><span class="toc-text">安装 Node.js</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装-Hexo"><span class="toc-text">安装 Hexo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo初始化"><span class="toc-text">Hexo初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#服务器"><span class="toc-text">服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成文件"><span class="toc-text">生成文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#部署"><span class="toc-text">部署</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-text">结语</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/10/25/7. Windows下MySQL解压版安装/">7. Windows下MySQL解压版安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/25/hello-world/">Hello World</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/23/9. Linux下使用Vi时方向键变乱码、删除键不能使用的解决方法/">Linux下使用Vi时方向键变乱码、删除键不能使用的解决方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/23/8. 树莓派配置/">树莓派服务器配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/19/6. CentOS 7 下配置IP、SSH、MySQL/">CentOS 7 下配置IP、SSH、MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/16/5. Ubuntu下配置SSH登录/">Ubuntu下配置SSH登录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/16/4. Ubuntu下安装jdk并配置环境变量/">Ubuntu下安装jdk并配置环境变量</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/15/3. Ubuntu下安装MySQL和基本操作/">Ubuntu下安装MySQL和基本操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/13/2. Git指令的简单有效使用/">Git指令的简单有效使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/12/1. Hexo介绍和搭建/">Hexo的安装配置和搭建</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/">CentOS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Ubuntu/">Ubuntu</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/raspberry/">raspberry</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="https://www.baidu.com/" title="百度一下" target="_blank">百度一下</a><ul></ul><a href="https://weibo.com/" title="微博热点" target="_blank">微博热点</a><ul></ul><a href="https://gywfnh.github.io/" title="个人博客" target="_blank">个人博客</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">GYSG.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>
