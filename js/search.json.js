@@ -1,3 +1,6 @@
+/*
+*  �޸���rootĿ¼�£�search�����쳣������
+*/
 (function() {
     var keyInput = document.getElementById('search-key'),
         searchForm = document.getElementById('search-form'),
@@ -6,6 +9,7 @@
         searchResult = document.getElementById('search-result'),
         searchTpl = document.getElementById('search-tpl').innerHTML,
         winWidth, winHeight, searchData;
+	var baseUrl = "";
     if (window.innerWidth) {
         winWidth = parseInt(window.innerWidth);
     } else if ((document.body) && (document.body.clientWidth)) {
@@ -21,7 +25,7 @@
     function loadData(success) {
         if (!searchData) {
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/content.json', true);
+            xhr.open('GET', '/' + baseUrl + 'content.json', true);
             xhr.onload = function() {
                 if (this.status >= 200 && this.status < 300) {
                     var res = JSON.parse(this.response||this.responseText);
@@ -54,7 +58,7 @@
             html = data.map(function(post) {
                 return tpl(searchTpl, {
                     title: post.title,
-                    path: post.path,
+                    path: baseUrl + post.path,
                     date: new Date(post.date).toLocaleDateString(),
                     tags: post.tags.map(function(tag) {
                         return '<span>' + tag.name + '</span>';

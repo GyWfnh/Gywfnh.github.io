@@ -1,0 +1,166 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="自己搭窝自己住"><title>CentOS 7 下配置IP、SSH、MySQL | 没事瞎折腾</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">CentOS 7 下配置IP、SSH、MySQL</h1><a id="logo" href="/.">没事瞎折腾</a><p class="description">能学多少是多少，学到就是赚到</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">CentOS 7 下配置IP、SSH、MySQL</h1><div class="post-meta"><a href="/2018/03/19/7/#comments" class="comment-count"></a><p><span class="date">Mar 19, 2018</span><span><a href="/categories/CentOS/" class="category">CentOS</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><h2 id="CentOS-7"><a href="#CentOS-7" class="headerlink" title="CentOS 7"></a>CentOS 7</h2><p>CentOS 7 是目前国内主流的云服务器操作系统，也是应用最广泛的生产环境。本文简单介绍centos7的初始化使用和简单配置。</p>
+<p>本文中CentOS 7系统安装在虚拟机中，关于安装方法和步骤不再赘述。不懂的可以自己查找资料，本文不是重点。</p>
+<h2 id="CentOS-7-配置IP地址"><a href="#CentOS-7-配置IP地址" class="headerlink" title="CentOS 7 配置IP地址"></a>CentOS 7 配置IP地址</h2><p>CentOS 7 安装完成后，默认没有开启网络服务，需要手动进行配置。</p>
+<ol>
+<li><p>进入网络配置文件目录</p>
+<blockquote>
+<p>$ cd  /etc/sysconfig/network-scripts/</p>
+</blockquote>
+</li>
+<li><p>打开并编辑配置文件</p>
+<blockquote>
+<p>$ ls    //查看目录下的配置文件</p>
+<p>$ vi ifcfg-ens33  //打开以ifcfg-en开头的配置文件</p>
+</blockquote>
+</li>
+<li><p>进行如下配置：</p>
+<pre><code>HWADDR=00:0C:29:8D:24:73  #要保持与ifconfig命令下查看的mac地址一致
+TYPE=Ethernet
+BOOTPROTO=static  #启用静态IP地址，动态为dhcp
+DEFROUTE=yes
+PEERDNS=yes
+PEERROUTES=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_PEERDNS=yes
+IPV6_PEERROUTES=yes
+IPV6_FAILURE_FATAL=no
+NAME=eno16777736  #网卡名称
+UUID=ae0965e7-22b9-45aa-8ec9-3f0a20a85d11
+ONBOOT=yes  #开启自动启用网络连接
+IPADDR0=192.168.0.220  #设置IP地址
+PREFIXO0=255.255.255.0  #设置子网掩码
+GATEWAY0=192.168.0.1  #设置网关
+DNS1=8.8.8.8  #设置主DNS
+DNS2=8.8.4.4  #设置备DNS
+</code></pre><p><br></p>
+</li>
+<li><p>保存退出后，重启网络服务</p>
+<blockquote>
+<p>$ :wq!  #退出并保存</p>
+</blockquote>
+<p> vi 编辑器使用方法：</p>
+<pre><code>启用编辑，按下 insert 键
+退出编辑状态，跳到命令模式，按下 Esc 键
+</code></pre><p><br><br> 命令提示：</p>
+<pre><code>:w    保存文件但不退出vi
+:w    file 将修改另外保存到file中，不退出vi
+:w!   强制保存，不推出vi
+:wq   保存文件并退出vi
+:wq!  强制保存文件，并退出vi
+:q    不保存文件，退出vi
+:q!   不保存文件，强制退出vi
+:e!   放弃所有修改，从上次保存文件开始再编辑
+</code></pre><p> <br><br> 重启服务后，如果出现以下错误，一般是配置文件的编写出现问题，仔细查实，确保大小写正确和mac地址一致。</p>
+<pre><code>Restarting network (via systemctl):  Job for network.service failed. 
+See &apos;systemctl status network.service&apos; and &apos;journalctl -xn&apos; for details.
+</code></pre><p><br><br>还可以使用如下命令，查看网卡相关的详细日志</p>
+</li>
+</ol>
+<blockquote>
+<p>$ cat /var/log/messages | grep network</p>
+</blockquote>
+<h2 id="CentOS-7-修改主机名"><a href="#CentOS-7-修改主机名" class="headerlink" title="CentOS 7 修改主机名"></a>CentOS 7 修改主机名</h2><blockquote>
+<p>$ vi /etc/hostname</p>
+<p>打开后，将localhost.localdomain 修改为你要修改的名称</p>
+</blockquote>
+<blockquote>
+<p>$ vi /etc/hosts</p>
+<p>127.0.0.1 localhost xxx #修改xxx为你要修改的名称</p>
+</blockquote>
+<blockquote>
+<p>$ :wq!  #保存并退出</p>
+<p>$ shutdown -r now  #立即重启系统</p>
+</blockquote>
+<h2 id="CentOS-7-安装openssh服务"><a href="#CentOS-7-安装openssh服务" class="headerlink" title="CentOS 7 安装openssh服务"></a>CentOS 7 安装openssh服务</h2><ol>
+<li><p>查看是否安装了相关软件：</p>
+<blockquote>
+<p>$ rpm -qa|grep -E “openssh”</p>
+</blockquote>
+<p>   显示结果含有以下三个软件，则表示已经安装，否则需要安装缺失的软件</p>
+<pre><code>openssh-ldap-6.6.1p1-35.el7_3.x86_64 
+openssh-clients-6.6.1p1-35.el7_3.x86_64 
+openssh-6.6.1p1-35.el7_3.x86_64 
+openssh-askpass-6.6.1p1-35.el7_3.x86_64 
+openssh-server-6.6.1p1-35.el7_3.x86_64 
+openssh-keycat-6.6.1p1-35.el7_3.x86_64 
+openssh-server-sysvinit-6.6.1p1-35.el7_3.x86_64
+</code></pre><p><br></p>
+</li>
+<li><p>安装openssh-server：</p>
+<blockquote>
+<p>$ sudo yum install openssh*</p>
+</blockquote>
+</li>
+<li><p>注册使用服务：</p>
+<blockquote>
+<p>$ sudo systemctl enable sshd</p>
+<p>$ sudo systemctl start sshd</p>
+<p>or: $ sudo service sshd start</p>
+</blockquote>
+</li>
+<li><p>打开防火墙的22端口</p>
+<pre><code>$ sudo firewall-cmd  --zone=public --add-port=22/tcp --permanent
+
+$ sudo service firewalld restart
+
+$ systemctl restart firewalld.service
+</code></pre><p><br><br>注：禁止firewall开机启动为：systemctl disable firewalld.service</p>
+</li>
+</ol>
+<h2 id="CentOS-7-安装-MySQL"><a href="#CentOS-7-安装-MySQL" class="headerlink" title="CentOS 7 安装 MySQL"></a>CentOS 7 安装 MySQL</h2><p>因为CentOS 7 的yum中没有MySQL的源，被mariaDB代替了。因此我们需要下载mysql的repo源，可以去MySQL官网找最新的repo源地址</p>
+<p><a href="https://dev.mysql.com/downloads/repo/yum/" target="_blank" rel="noopener">点击此处查找最新的MySQL的repo源地址</a></p>
+<p>首先，使用wget下载repo源。如果没有wget，安装即可</p>
+<blockquote>
+<p>$ yum install wget     #安装wget，如果已安装，可忽略</p>
+<p>$ wget <a href="https://repo.mysql.com//mysql57-community-release-el7-11.noarch.rpm" target="_blank" rel="noopener">https://repo.mysql.com//mysql57-community-release-el7-11.noarch.rpm</a> #安装MySQL RPM包</p>
+<p>$ yum install mysql-community-server #安装MySQL</p>
+</blockquote>
+<p>安装成功后，重启MySQL服务</p>
+<blockquote>
+<p>$ service mysqld restart #如果不行，运行下面的指令</p>
+<p>$ systemctl restart mysqld.service </p>
+</blockquote>
+<p>刚开始安装的Mysql5.7是会随机生成一个root密码的，要先找到这个随机密码，然后改新密码。</p>
+<p>通过grep命令查找随机root密码</p>
+<blockquote>
+<p>$ grep “password” /var/log/mysqld.log</p>
+</blockquote>
+<p>根据返回结果</p>
+<pre><code>2018-03-19T07:38:12.945057Z 1 [Note] A temporary password is generated for root@localhost: dlA42dmP;+QJ
+</code></pre><p>root@localhost: 之后的无规则字符串即为生成的随机密码。</p>
+<p>同样，可以去 /var/log 目录下，打开 mysqld.log 文件来查看密码。</p>
+<p>临时密码登录后，需要修改root密码才能进行其他操作：</p>
+<blockquote>
+<p>$ SET password=PASSWORD(“Mysql123”); </p>
+<p>$ ALTER USER ‘root‘@’localhost’ IDENTIFIED BY ‘Mysql123’;</p>
+</blockquote>
+<p>以上两种密码修改方式均可使用，但是要注意密码规则限制，否则会报错：</p>
+<pre><code>ERROR 1819 (HY000): Your password does not satisfy the current policy requirements
+</code></pre><p>密码修改成功后，可以查看和修改密码策略</p>
+<ol>
+<li><p>查看当前密码策略</p>
+<blockquote>
+<p>$ show variables like ‘%password%’;</p>
+</blockquote>
+</li>
+<li><p>修改策略（在配置文件中增加以下语句）</p>
+<blockquote>
+<p>$ vi /etc/my.conf</p>
+</blockquote>
+<p> 添加如下条件：</p>
+<pre><code>validate_password = off 
+</code></pre><p> <br><br> 说明：off 是 关闭； 0 是 LOW；  1 是 MEDIUM；  2 是 STRONG</p>
+</li>
+</ol>
+<p>另外，MySQL官网密码策略详细说明，<a href="http://dev.mysql.com/doc/refman/5.7/en/validate-password-options-variables.html#sysvar_validate_password_policy" target="_blank" rel="noopener">可点击此处进行查看</a></p>
+<p>修改完密码规则后(可改可不改，根据项目对安全的需求而定)，添加一个可以远程访问的用户：</p>
+<pre><code>$ mysql&gt;grant all on *.* to username@&apos;%&apos; identified by &apos;password&apos;;
+</code></pre><p>最后不要忘记添加防火墙的3306端口，用于打开数据库的远程访问：</p>
+<pre><code>$ firewall-cmd  --zone=public --add-port=3306/tcp --permanet
+
+$ systemctl restart firewalld.service #重启防火墙使设置生效
+</code></pre><p>余下步骤可参考另一篇文章，<a href="https://gywfnh.github.io/2018/03/15/ubuntu-mysql/" target="_blank" rel="noopener">点击此处跳转</a></p>
+</div><div class="tags"></div><div class="post-share"></div><div class="post-nav"><a href="/2018/06/16/8/" class="pre">Windows下MySQL解压版安装</a><a href="/2018/03/16/6/" class="next">Ubuntu下配置SSH登录</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CentOS-7"><span class="toc-text">CentOS 7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CentOS-7-配置IP地址"><span class="toc-text">CentOS 7 配置IP地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CentOS-7-修改主机名"><span class="toc-text">CentOS 7 修改主机名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CentOS-7-安装openssh服务"><span class="toc-text">CentOS 7 安装openssh服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CentOS-7-安装-MySQL"><span class="toc-text">CentOS 7 安装 MySQL</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/10/26/11/">树莓派系统的备份与还原</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/23/10/">Linux下使用Vi时方向键变乱码、删除键不能使用的解决方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/23/9/">树莓派服务器配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/16/8/">Windows下MySQL解压版安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/19/7/">CentOS 7 下配置IP、SSH、MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/16/6/">Ubuntu下配置SSH登录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/16/4/">Ubuntu下安装jdk并配置环境变量</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/15/5/">Ubuntu下安装MySQL和基本操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/13/3/">Git指令的简单有效使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/12/2/">BlueLake博客主题配置</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/">CentOS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Ubuntu/">Ubuntu</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/raspberry/">raspberry</a><span class="category-list-count">2</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="https://www.baidu.com/" title="百度一下" target="_blank">百度一下</a><ul></ul><a href="https://weibo.com/" title="微博热点" target="_blank">微博热点</a><ul></ul><a href="https://gywfnh.github.io/" title="个人博客" target="_blank">个人博客</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy 2013-2018 <a href="/." rel="nofollow">GYSG.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://gywfnh.github.io"> GyWfnh.</a></span></p></div></div></div><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script></body></html>
