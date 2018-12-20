@@ -9,7 +9,7 @@
         searchResult = document.getElementById('search-result'),
         searchTpl = document.getElementById('search-tpl').innerHTML,
         winWidth, winHeight, searchData;
-	var baseUrl = "";
+	var baseUrl = "/";
     if (window.innerWidth) {
         winWidth = parseInt(window.innerWidth);
     } else if ((document.body) && (document.body.clientWidth)) {

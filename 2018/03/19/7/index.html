@@ -159,7 +159,7 @@ $ systemctl restart firewalld.service
 <p>修改完密码规则后(可改可不改，根据项目对安全的需求而定)，添加一个可以远程访问的用户：</p>
 <pre><code>$ mysql&gt;grant all on *.* to username@&apos;%&apos; identified by &apos;password&apos;;
 </code></pre><p>最后不要忘记添加防火墙的3306端口，用于打开数据库的远程访问：</p>
-<pre><code>$ firewall-cmd  --zone=public --add-port=3306/tcp --permanet
+<pre><code>$ firewall-cmd --zone=public --add-port=3306/tcp --permanet
 
 $ systemctl restart firewalld.service #重启防火墙使设置生效
 </code></pre><p>余下步骤可参考另一篇文章，<a href="https://gywfnh.github.io/2018/03/15/ubuntu-mysql/" target="_blank" rel="noopener">点击此处跳转</a></p>
