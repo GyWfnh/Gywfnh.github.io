@@ -1,0 +1,446 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="自己搭窝自己住"><title>Centos8安装Docker | 没事瞎折腾</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Centos8安装Docker</h1><a id="logo" href="/.">没事瞎折腾</a><p class="description">能学多少是多少，学到就是赚到</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">Centos8安装Docker</h1><div class="post-meta"><a href="/2020/05/20/12/#comments" class="comment-count"></a><p><span class="date">May 20, 2020</span><span><a href="/categories/docker/" class="category">docker</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><h2 id="Docker容器操作"><a href="#Docker容器操作" class="headerlink" title="Docker容器操作"></a>Docker容器操作</h2><ol>
+<li><p>查看容器：</p>
+<blockquote>
+<p>$ sudo docker ps -a</p>
+</blockquote>
+</li>
+<li><p>打开容器：</p>
+<blockquote>
+<p>sudo docker statr “CONTAINER ID”</p>
+<p>$ sudo docker start cc32bf495919   //举例：打开portainerUI</p>
+</blockquote>
+</li>
+<li><p>操作容器：</p>
+<blockquote>
+<p>$ sudo docker exec -it “container-name” bash        // 进入容器操作界面</p>
+</blockquote>
+</li>
+<li><p>退出容器：</p>
+<ol>
+<li>直接exit退出容器，会关闭当前容器；</li>
+<li>通过按Ctrl+P+Q进行退出容器，此时不会关闭当前容器。</li>
+</ol>
+</li>
+<li><p>宿主机与容器间数据互传：</p>
+<pre><code>宿主机传给容器：
+</code></pre><blockquote>
+<p>$ sudo docker cp /home/gysg/developer/catalina.sh tomcat:/usr/local/tomcat/bin/</p>
+</blockquote>
+<p> 容器传给宿主机：</p>
+<blockquote>
+<p>$ sudo docker cp tomcat:/usr/local/tomcat/bin/catalina.sh /home/gysg/developer/</p>
+</blockquote>
+<p> 文件权限不一致造成运行问题，因此需要把权限取消或者还原</p>
+<blockquote>
+<p>$ sudo chmod 777 -R dirs        // 设置为777，任何人都可以操作</p>
+<p>$ sudo chmod 644 -R dirs        // 设置为root权限</p>
+</blockquote>
+</li>
+<li><p>容器运行说明：</p>
+<blockquote>
+<p>$ docker run [OPTIONS] IMAGE [COMMAND] [ARG…]</p>
+</blockquote>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">-a stdin: 指定标准输入输出内容类型，可选 STDIN/STDOUT/STDERR 三项；</span><br><span class="line"></span><br><span class="line">-d: 后台运行容器，并返回容器ID；</span><br><span class="line"></span><br><span class="line">-i: 以交互模式运行容器，通常与 -t 同时使用；</span><br><span class="line"></span><br><span class="line">-P: 随机端口映射，容器内部端口随机映射到主机的高端口</span><br><span class="line"></span><br><span class="line">-p: 指定端口映射，格式为：主机(宿主)端口:容器端口</span><br><span class="line"></span><br><span class="line">-t: 为容器重新分配一个伪输入终端，通常与 -i 同时使用；</span><br><span class="line"></span><br><span class="line">--name=&quot;nginx-lb&quot;: 为容器指定一个名称；</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>自动重启设置：</p>
+<p>在运行docker容器时可以加如下参数来保证每次docker服务重启后容器也自动重启：</p>
+<blockquote>
+<p>$ sudo docker run –restart=always</p>
+</blockquote>
+<p>如果已经启动了则可以使用如下命令：</p>
+<blockquote>
+<p>$ sudo docker update –restart=always <container id=""></container></p>
+</blockquote>
+</li>
+</ol>
+<h3 id="CentOS-8中安装Docker"><a href="#CentOS-8中安装Docker" class="headerlink" title="CentOS 8中安装Docker"></a>CentOS 8中安装Docker</h3><p>官方参考地址：<a href="https://docs.docker.com/install/linux/docker-ce/centos/" target="_blank" rel="noopener">https://docs.docker.com/install/linux/docker-ce/centos/</a></p>
+<p>里面包含包下载地址： <a href="https://download.docker.com/linux/centos/7/x86_64/stable/Packages/" target="_blank" rel="noopener">https://download.docker.com/linux/centos/7/x86_64/stable/Packages/</a> </p>
+<ol>
+<li><p>安装依赖</p>
+<blockquote>
+<p>$ sudo yum install -y yum-utils  device-mapper-persistent-data  lvm2</p>
+<p>$ sudo yum-config-manager  –add-repo   <a href="https://download.docker.com/linux/centos/docker-ce.repo" target="_blank" rel="noopener">https://download.docker.com/linux/centos/docker-ce.repo</a></p>
+<p>$ sudo yum install docker-ce docker-ce-cli containerd.io</p>
+</blockquote>
+<p>如果报错：Problem: package docker-ce-3:19.03.4-3.el7.x86_64 requires containerd.io &gt;= 1.2.2-3 那就先装新版的 containerd.io</p>
+<blockquote>
+<p>$ sudo dnf install <a href="https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm" target="_blank" rel="noopener">https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm</a></p>
+</blockquote>
+</li>
+<li><p>再装剩下两个</p>
+<blockquote>
+<p>$ sudo yum install docker-ce docker-ce-cli</p>
+<p>$ sudo systemctl start docker</p>
+<p>$ docker –version</p>
+</blockquote>
+</li>
+<li><p>开机自启</p>
+<blockquote>
+<p>$ sudo systemctl enable docker</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="CentOS-8中安装Docker出现和Podman冲突"><a href="#CentOS-8中安装Docker出现和Podman冲突" class="headerlink" title="CentOS 8中安装Docker出现和Podman冲突"></a>CentOS 8中安装Docker出现和Podman冲突</h3><ol>
+<li><p>查看是否安装 Podman</p>
+<blockquote>
+<p>rpm -q podman</p>
+</blockquote>
+</li>
+<li><p>删除Podman</p>
+<blockquote>
+<p>dnf remove podman</p>
+</blockquote>
+</li>
+<li><p>安装 Docker </p>
+<blockquote>
+<p>dnf install docker-ce docker-ce-cli</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="Docker下安装图形化工具"><a href="#Docker下安装图形化工具" class="headerlink" title="Docker下安装图形化工具"></a>Docker下安装图形化工具</h3><pre><code>docker 图形页面管理工具常用的有三种，DockerUI ，Portainer ，Shipyard  。DockerUI 是 Portainer 的前身，这三个工具通过docker  api来获取管理的资源信息。平时我们常常对着shell对着这些命令行客户端，审美会很疲劳，如果有漂亮的图形化界面可以直观查看docker资源信息，也是非常方便的。今天我们就搭建单机版的三种常用图形页面管理工具。这三种图形化管理工具以Portainer最为受欢迎。
+</code></pre><p>安装轻量级图形页面管理之Portainer：</p>
+<ol>
+<li><p>查看portainer镜像</p>
+<blockquote>
+<p>$ docker search portainer</p>
+</blockquote>
+</li>
+<li><p>选择喜欢的portainer风格镜像，下载</p>
+<blockquote>
+<p>$ docker pull portainer/portainer </p>
+</blockquote>
+</li>
+<li><p>启动dockerui容器</p>
+<blockquote>
+<p>$ docker run –restart=always -d –name portainerUI -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer</p>
+</blockquote>
+</li>
+<li><p>浏览器访问 <a href="http://192.168.2.119:9000" target="_blank" rel="noopener">http://192.168.2.119:9000</a> , 设置一个密码即可，点击创建用户</p>
+</li>
+</ol>
+<h3 id="Docker下安装MySQL8"><a href="#Docker下安装MySQL8" class="headerlink" title="Docker下安装MySQL8"></a>Docker下安装MySQL8</h3><ol>
+<li><p>安装MySQL源</p>
+<blockquote>
+<p>$ sudo docker pull mysql:8.0.20        // 指定版本号安装MySQL</p>
+</blockquote>
+</li>
+<li><p>第一次启动</p>
+<blockquote>
+<p>$ sudo docker run -p 3306:3306 –name mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql:8.0.20</p>
+</blockquote>
+</li>
+<li><p>配置持久化数据</p>
+<ol>
+<li><p>根目录创建目录：</p>
+<blockquote>
+<p>$ mkdir /workdir</p>
+</blockquote>
+</li>
+<li><p>目录迁移：</p>
+<blockquote>
+<p>$ cp /var/lib/mysql /workdir/</p>
+</blockquote>
+</li>
+<li><p>配置信息修改：</p>
+<p>打开/etc/mysql目录下的my.cnf配置文件，修改其中的 ”datadir = /workdir/mysql“，再重新存入原位置</p>
+<blockquote>
+<p>$ sudo /home/***/my.cnf mysql:/etc/mysql</p>
+</blockquote>
+</li>
+<li><p>重启容器MySQL</p>
+</li>
+</ol>
+</li>
+<li><p>修改加密规则</p>
+<blockquote>
+<p>$ docker exec -it mysql bash        // 进入MySQLcontainer</p>
+<p>$ mysql -uroot -p123456        // 登录MySQL</p>
+<p>$ alter user ‘root‘@’%’ identified by ‘123456’ password expire never;</p>
+<p>$ alter user ‘root‘@’%’ identified with mysql_native_password by ‘123456’;</p>
+<p>$ create user ‘xxh‘@’%’ identified with mysql_native_password by ‘xxh123!@#’;</p>
+<p>$ GRANT ALL PRIVILEGES ON <em>.</em> TO ‘xxh‘@’%’;</p>
+<p>$ flush privileges;        // 使设置立即生效</p>
+</blockquote>
+</li>
+<li><p>镜像拉取问题</p>
+<p>默认会拉取最新版本的镜像，然而却总是卡在某段动也不能动……</p>
+<p>解决方案先修改宿主机下的 /etc/docker/的daemon.json文件，此处网上有多种修改方案我也试过几种…最后用的是下面这个：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;registry-mirrors&quot;: [&quot;https://9cpn8tt6.mirror.aliyuncs.com&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>dockerfile配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">container_name: &apos;local_db&apos;</span><br><span class="line">build: ./services/mysql</span><br><span class="line">environment: MYSQL_ROOT_PASSWORD: $&#123;MYSQL_ROOT_PASSWORD&#125;</span><br><span class="line">ports:</span><br><span class="line">	- &quot;3306:3306&quot;</span><br><span class="line">volumes:</span><br><span class="line">	- $&#123;MYSQL_DATA_PATH&#125;:/var/lib/mysql</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>数据持久化（不推荐）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 需要在修改mysql容器中的根目录下，新建目录 mdkir /workdir  。</span><br><span class="line">2. 将 /var/lib/mysql 复制 到新建目录中。</span><br><span class="line">3. 修改 /etc/mysql/my.cnf   </span><br><span class="line">		datadir = /workdir/mysql</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="Docker下安装Tomcat"><a href="#Docker下安装Tomcat" class="headerlink" title="Docker下安装Tomcat"></a>Docker下安装Tomcat</h3><ol>
+<li><p>安装Tomcat</p>
+<blockquote>
+<p>$ sudo docker pull tomcat:latest</p>
+</blockquote>
+</li>
+<li><p>设置Tomcat时区一致</p>
+<p>在tomcat/bin下的catalina.sh最后加上下面这一句即可：</p>
+<blockquote>
+<p>JAVA_OPTS=”${JAVA_OPTS} -Duser.timezone=GMT+08”</p>
+</blockquote>
+</li>
+<li><p>启动Tomcat</p>
+<blockquote>
+<p>$ sudo docker run -p 8090:8080 –name tomcat -d tomcat:latest</p>
+</blockquote>
+<p>或者如下：</p>
+<blockquote>
+<p>$ sudo docker run –name tomcat -d -p 8090:8080 -v /home/gysg/developer/websoft:/usr/local/tomcat/webapps -v /mnt/data:/mnt/data tomcat-gysg:2.0</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="给运行中Docker容器安装SSH服务"><a href="#给运行中Docker容器安装SSH服务" class="headerlink" title="给运行中Docker容器安装SSH服务"></a>给运行中Docker容器安装SSH服务</h3><p>这里我以我本地一个运行中的SQL Server的数据库服务为例</p>
+<pre><code>1、打开命令面板，输入指令docker ps查看运行中的容器并复制容器ID
+
+2、输入指令docker exec -it &lt;复制的容器ID&gt; /bin/sh,进入命令行工具
+
+3、进入命令行工具后首先建议输入指令apt-get update更新下源
+
+4、输入指令apt-get install openssh-server,安装SSH服务
+
+5、安装完毕后，输入指令service ssh satrt 启动SSH服务
+
+6、使用vim进入/etc/ssh/sshd.config文件更改SSH服务配置，将PermitRootLogin的值从withoutPassword改为yes，允许root用户进行登录
+
+7、输入指令passwd root设置root用户登录密码
+
+8、如果docker容器中没有安装vim,则输入指令apt-get install vim进行安装
+
+9、输入指令service ssh restart重启SSH服务
+
+10、输入exit退出当前容器命令行工具
+
+11、回到系统命令面板，输入指令docker ps查看当前运行中的容器并复制安装好SSH服务的容器ID
+
+12、为了避免后期因为各种原因重复安装SSH服务，建议输入指令docker commit &lt;复制的容器ID&gt; &lt;自己定义的镜像名&gt;，保存经想到本地
+
+13、停止当前镜像，输入指令docker run -e &apos;ACCEPT_EULA=Y&apos; -e &apos;SA_PASSWORD=567rty%^&amp;YUI&apos; -p 1433:1433 -p 8400:20 -d microsoft/mssql-server-linux:latest,启动刚才保存在本地的镜像并把SSH服务的20端口映射出来，这里我映射的是主机8400duankou
+
+14、为了方便，这里还可以输入指令docker update --restart=always &lt;容器ID&gt;让容器保持始终运行。
+</code></pre><h3 id="Docker下DNS解析出错的处理"><a href="#Docker下DNS解析出错的处理" class="headerlink" title="Docker下DNS解析出错的处理"></a>Docker下DNS解析出错的处理</h3><p>Temporary failure in name resolution（域名解析暂时失败）</p>
+<p>​    我的操作环境为CentOS 8，与CentOS 7使用命令完全一致。其他不同Linux系统版本命令可能会有所不同，请根据自己的系统版本使用对应命令，直接百度相关操作即可。</p>
+<ol>
+<li><p>检查主机网络设置</p>
+<p>查看系统是否打开ip地址转发功能：</p>
+<blockquote>
+<p>$ cat /proc/sys/net/ipv4/ip_forward        // 返回0则说明未打开，开启ip地址转发</p>
+</blockquote>
+<p>使用命令打开配置文件：</p>
+<blockquote>
+<p>$ vi /etc/sysctl.conf</p>
+</blockquote>
+<pre><code>打开内核配置文件，查找net.ipv4.ip_forward = 0，将其修改为net.ipv4.ip_forward = 1，若该行开头有#，将其去掉；若配置文件中没有此项，则在文件最后添加此内容。
+</code></pre><p>保存修改后，重启系统或输入以下命令使修改生效：</p>
+<blockquote>
+<p>$ sysctl -p /etc/sysctl.conf<br>$ systemctl restart network</p>
+</blockquote>
+<p>检查一下问题是否解决，若没有则进入下一步排查。</p>
+</li>
+<li><p>检查主机防火墙配置</p>
+<p>查看防火墙状态（若防火墙为关闭状态，可跳过防火墙有关设置）：</p>
+<blockquote>
+<p>$ sudo firewall-cmd –state</p>
+</blockquote>
+<p>若返回<code>runging</code>，则防火墙为开启状态，查看防火墙是否开启ip地址转发（ip地址伪装）：</p>
+<blockquote>
+<p>$ sudo firewall-cmd –query-masquerade</p>
+</blockquote>
+<p>若返回<code>no</code>，则输入以下命令开启ip地址转发：</p>
+<blockquote>
+<p>$ sudo firewall-cmd –add-masquerade –permanent</p>
+</blockquote>
+<p>然后输入以下命令使修改生效：</p>
+<blockquote>
+<p>$ sudo firewall-cmd –reload</p>
+</blockquote>
+<p>再次检查问题是否已经解决，若没有则进行再一步排查。</p>
+</li>
+<li><p>设置Docker指定DNS服务器</p>
+<p>打开Docker相关设置文件（宿主机内），没有就新建一个，输入下列命令会打开或自动新建：</p>
+<blockquote>
+<p>$ vi /etc/docker/daemon.json</p>
+</blockquote>
+<p>在文件中输入以下内容：</p>
+<pre><code>{
+    &quot;dns&quot;: [&quot;8.8.8.8&quot;,&quot;114.114.114.114&quot;]
+}
+</code></pre><p>8.8.8.8和114.114.114.114是两个DNS服务器，可以修改或增加。</p>
+<p>然后重启Docker：</p>
+<blockquote>
+<p>$ systemctl restart docker</p>
+</blockquote>
+<p>到这里问题应该就可以得到解决了。</p>
+</li>
+</ol>
+<h3 id="修改容器配置文件，重启docker服务"><a href="#修改容器配置文件，重启docker服务" class="headerlink" title="修改容器配置文件，重启docker服务"></a>修改容器配置文件，重启docker服务</h3><ol>
+<li><p>容器的配置文件路径</p>
+<blockquote>
+<p>/var/lib/docker/containers/[hash_of_the_container]/hostconfig.json`</p>
+</blockquote>
+<p>其中的hashofthecontainer是docker镜像的hash值，可以通过docker ps或者docker inspect containername查看。（CONTAINER ID就可以看出来）</p>
+</li>
+<li><p>按需修改端口, 按需修改挂载目录(权限和属主属组要相同)，然后重启docker服务</p>
+</li>
+<li><p>格式：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">"Binds"</span>:</span><br><span class="line">					[<span class="string">"/srv/gitlab/logs:/var/log/gitlab"</span>,</span><br><span class="line">					 <span class="string">"/srv/gitlab/data:/var/opt/gitlab"</span>,</span><br><span class="line">					 <span class="string">"/srv/gitlab/config:/etc/gitlab"</span>],</span><br><span class="line">	<span class="attr">"ContainerIDFile"</span>:<span class="string">""</span>,</span><br><span class="line">	<span class="attr">"LogConfig"</span>:</span><br><span class="line">					&#123;<span class="attr">"Type"</span>:<span class="string">"journald"</span>,<span class="attr">"Config"</span>:&#123;&#125;&#125;,</span><br><span class="line">	<span class="attr">"NetworkMode"</span>:<span class="string">"default"</span>,</span><br><span class="line">	<span class="attr">"PortBindings"</span>:</span><br><span class="line">					&#123;<span class="attr">"22/tcp"</span>:[&#123;<span class="attr">"HostIp"</span>:<span class="string">""</span>,<span class="attr">"HostPort"</span>:<span class="string">"10022"</span>&#125;],</span><br><span class="line">					 <span class="attr">"443/tcp"</span>:[&#123;<span class="attr">"HostIp"</span>:<span class="string">""</span>,<span class="attr">"HostPort"</span>:<span class="string">"10443"</span>&#125;],</span><br><span class="line">					 <span class="attr">"80/tcp"</span>:[&#123;<span class="attr">"HostIp"</span>:<span class="string">""</span>,<span class="attr">"HostPort"</span>:<span class="string">"10080"</span>&#125;]&#125;,</span><br><span class="line">	<span class="attr">"RestartPolicy"</span>:</span><br><span class="line">  				&#123;<span class="attr">"Name"</span>:<span class="string">"always"</span>,<span class="attr">"MaximumRetryCount"</span>:<span class="number">0</span>&#125;,</span><br><span class="line">	<span class="attr">"AutoRemove"</span>:<span class="literal">false</span>,</span><br><span class="line">	<span class="attr">"VolumeDriver"</span>:<span class="string">""</span>,</span><br><span class="line">	<span class="attr">"VolumesFrom"</span>:<span class="literal">null</span>,</span><br><span class="line">	<span class="attr">"CapAdd"</span>:<span class="literal">null</span>,</span><br><span class="line">	<span class="attr">"CapDrop"</span>:<span class="literal">null</span>,</span><br><span class="line">	<span class="attr">"Dns"</span>:[],</span><br><span class="line">	<span class="attr">"DnsOptions"</span>:[],</span><br><span class="line">	<span class="attr">"DnsSearch"</span>:[],</span><br><span class="line">	<span class="attr">"ExtraHosts"</span>:<span class="literal">null</span>,</span><br><span class="line">	<span class="attr">"GroupAdd"</span>:<span class="literal">null</span>,</span><br><span class="line">	<span class="attr">"IpcMode"</span>:<span class="string">""</span>,</span><br><span class="line">	<span class="attr">"Cgroup"</span>:<span class="string">""</span>,</span><br><span class="line">	<span class="attr">"Links"</span>:[],</span><br><span class="line">	<span class="attr">"OomScoreAdj"</span>:<span class="number">0</span>,</span><br><span class="line">	<span class="attr">"PidMode"</span>:<span class="string">""</span>,</span><br><span class="line">	<span class="attr">"Privileged"</span>:<span class="literal">false</span>,</span><br><span class="line">	<span class="attr">"PublishAllPorts"</span>:<span class="literal">false</span>,</span><br><span class="line">	<span class="attr">"ReadonlyRootfs"</span>:<span class="literal">false</span>,</span><br><span class="line">	<span class="attr">"SecurityOpt"</span>:<span class="literal">null</span>,</span><br><span class="line">	<span class="attr">"UTSMode"</span>:<span class="string">""</span>,</span><br><span class="line">	<span class="attr">"UsernsMode"</span>:<span class="string">""</span>,</span><br><span class="line">	<span class="attr">"ShmSize"</span>:<span class="number">67108864</span>,</span><br><span class="line">	<span class="attr">"Runtime"</span>:<span class="string">"docker-runc"</span>,</span><br><span class="line">	<span class="attr">"ConsoleSize"</span>:[<span class="number">0</span>,<span class="number">0</span>],</span><br><span class="line">	<span class="attr">"Isolation"</span>:<span class="string">""</span>,</span><br><span class="line">	<span class="attr">"CpuShares"</span>:<span class="number">0</span>,</span><br><span class="line">	<span class="attr">"Memory"</span>:<span class="number">0</span>,</span><br><span class="line">	<span class="attr">"NanoCpus"</span>:<span class="number">0</span>,</span><br><span class="line">	<span class="attr">"CgroupParent"</span>:<span class="string">""</span>,</span><br><span class="line">	<span class="attr">"BlkioWeight"</span>:<span class="number">0</span>,</span><br><span class="line">	<span class="attr">"BlkioWeightDevice"</span>:<span class="literal">null</span>,</span><br><span class="line">	<span class="attr">"BlkioDeviceReadBps"</span>:<span class="literal">null</span>,</span><br><span class="line">	<span class="attr">"BlkioDeviceWriteBps"</span>:<span class="literal">null</span>,</span><br><span class="line">	<span class="attr">"BlkioDeviceReadIOps"</span>:<span class="literal">null</span>,</span><br><span class="line">	<span class="attr">"BlkioDeviceWriteIOps"</span>:<span class="literal">null</span>,</span><br><span class="line">	<span class="attr">"CpuPeriod"</span>:<span class="number">0</span>,</span><br><span class="line">	<span class="attr">"CpuQuota"</span>:<span class="number">0</span>,</span><br><span class="line">	<span class="attr">"CpuRealtimePeriod"</span>:<span class="number">0</span>,</span><br><span class="line">	<span class="attr">"CpuRealtimeRuntime"</span>:<span class="number">0</span>,</span><br><span class="line">	<span class="attr">"CpusetCpus"</span>:<span class="string">""</span>,</span><br><span class="line">	<span class="attr">"CpusetMems"</span>:<span class="string">""</span>,</span><br><span class="line">	<span class="attr">"Devices"</span>:[],</span><br><span class="line">	<span class="attr">"DiskQuota"</span>:<span class="number">0</span>,</span><br><span class="line">	<span class="attr">"KernelMemory"</span>:<span class="number">0</span>,</span><br><span class="line">	<span class="attr">"MemoryReservation"</span>:<span class="number">0</span>,</span><br><span class="line">	<span class="attr">"MemorySwap"</span>:<span class="number">0</span>,</span><br><span class="line">	<span class="attr">"MemorySwappiness"</span>:<span class="number">-1</span>,</span><br><span class="line">	<span class="attr">"OomKillDisable"</span>:<span class="literal">false</span>,</span><br><span class="line">	<span class="attr">"PidsLimit"</span>:<span class="number">0</span>,</span><br><span class="line">	<span class="attr">"Ulimits"</span>:<span class="literal">null</span>,</span><br><span class="line">	<span class="attr">"CpuCount"</span>:<span class="number">0</span>,</span><br><span class="line">	<span class="attr">"CpuPercent"</span>:<span class="number">0</span>,</span><br><span class="line">	<span class="attr">"IOMaximumIOps"</span>:<span class="number">0</span>,</span><br><span class="line">	<span class="attr">"IOMaximumBandwidth"</span>:<span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Tomcat配置</p>
+<p>[“/home/gysg/developer/websoft:/usr/local/tomcat/webapps”, “/mnt/data:/mnt/data”]</p>
+<pre><code>sudo docker run --name tomcat-new-01 -d -p 8090:8080 -v /home/gysg/developer/websoft:/usr/local/tomcat/webapps -v /mnt/data:/mnt/data tomcat-new-01:latest
+</code></pre></li>
+</ol>
+<h3 id="Docker的备份与还原"><a href="#Docker的备份与还原" class="headerlink" title="Docker的备份与还原"></a>Docker的备份与还原</h3><ol>
+<li><p>备份容器</p>
+<blockquote>
+<p>$ docker ps        // 查看已创建的容器</p>
+<p>$ docker commit -p “CONTAINER ID” container-name        // 提交生成镜像快照</p>
+</blockquote>
+</li>
+<li><p>镜像打包</p>
+<ol>
+<li><p>提交镜像到docker hub</p>
+<pre><code>​        如果我们想要在Docker注册中心上传或备份镜像，我们只需要运行 docker login 命令来登录进Docker注册中心，然后推送所需的镜像即可。
+</code></pre><p>代码如下：</p>
+<blockquote>
+<p>$ docker login        // username:  password:  </p>
+<p>$ docker tag “IMAGE ID” “filepath/image-name:tag”        // 打标记</p>
+<p>$ docker push “filepath/image-name”        // 提交</p>
+</blockquote>
+</li>
+<li><p>保存镜像到本地文件</p>
+<blockquote>
+<p>$ docker save -o ~/container-backup.tar container-backup        // 备份路径.tar 要备份的镜像名称</p>
+</blockquote>
+</li>
+</ol>
+</li>
+<li><p>恢复备份</p>
+<ol>
+<li><p>远程恢复</p>
+<blockquote>
+<p>$ docker pull “filepath/image-name:tag”</p>
+</blockquote>
+</li>
+<li><p>本地恢复</p>
+<blockquote>
+<p>$ docker load -i ~/container-backup.tar        // 备份路径.tar</p>
+</blockquote>
+</li>
+</ol>
+</li>
+<li><p>加载新容器</p>
+<blockquote>
+<p>docker run …</p>
+</blockquote>
+</li>
+<li><p>重启docker</p>
+<blockquote>
+<p>$  sudo systemctl restart docker</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="Docker报错日常docker-Error-response-from-daemon"><a href="#Docker报错日常docker-Error-response-from-daemon" class="headerlink" title="Docker报错日常docker: Error response from daemon:"></a>Docker报错日常docker: Error response from daemon:</h3><p>解决方法：</p>
+<ol>
+<li>停止所有的容器，有时候也不需要全部停止</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stop $(docker ps -q)</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>强制移除此容器</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm -f mysql1</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>清理此容器的网络占用</li>
+</ol>
+<p>格式：<code>docker network disconnect --force 网络模式 容器名称</code></p>
+<p>示例：<code>docker network disconnect --force bridge mysql1</code></p>
+<ol start="4">
+<li>简查是否还有同名容器占用</li>
+</ol>
+<p>格式：<code>docker network inspect 网络模式</code><br> 示例：<code>docker network inspect bridge</code></p>
+<ol start="5">
+<li>重新构建容器</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name mysql1 -d -p3306:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql:latest</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li><p>Tomcat启动运行缓慢处理</p>
+<ol>
+<li><p>直接改jdk的配置</p>
+<p>打开jdk安装路径 $JAVA_PATH/jre/lib/security/java.security 这个文件，找到下面的内容:</p>
+<blockquote>
+<p>securerandom.source=file:/dev/random</p>
+</blockquote>
+<p>替换成：</p>
+<blockquote>
+<p>securerandom.source=file:/dev/./urandom</p>
+</blockquote>
+</li>
+<li><p>或者在启动时加上如下参数：</p>
+<blockquote>
+<p>$ -e JAVA_OPTS=”-Duser.timezone=Asia/Shanghai -Djava.security.egd=file:/dev/./urandom”</p>
+</blockquote>
+</li>
+<li><p>或者修改catlina.sh，在第一行加入以下代码：</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; if [[ &quot;$JAVA_OPTS&quot; != *-Djava.security.egd=* ]]; then</span><br><span class="line">&gt;     JAVA_OPTS=&quot;$JAVA_OPTS -Djava.security.egd=&quot;</span><br><span class="line">&gt; fi</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="Docker镜像无法删除的问题"><a href="#Docker镜像无法删除的问题" class="headerlink" title="Docker镜像无法删除的问题"></a>Docker镜像无法删除的问题</h3><blockquote>
+<p>$ sudo docker image ls</p>
+<p>$ sudo docker rm -f tomcat:latest</p>
+</blockquote>
+<h3 id="Docker下执行构建命令"><a href="#Docker下执行构建命令" class="headerlink" title="Docker下执行构建命令"></a>Docker下执行构建命令</h3><blockquote>
+<p>$ sudo docker build -t image-name:tag .</p>
+</blockquote>
+<h3 id="Docker下创建kms服务器"><a href="#Docker下创建kms服务器" class="headerlink" title="Docker下创建kms服务器"></a>Docker下创建kms服务器</h3><ol>
+<li><p>启动KMS服务器：</p>
+<blockquote>
+<p> $ sudo docker run -idt -p 1688:1688 –name kms-server vlmcsd</p>
+</blockquote>
+</li>
+<li><p>启动Tomcat服务器：</p>
+<blockquote>
+<p>$ sudo docker run –name tomcat -dit -p 8090:8080 -v /etc/localtime:/etc/localtime:ro -v /home/gysg/developer/websoft:/usr/local/soft/tomcat/webapps -v /mnt/data:/mnt/data tomcat-gysg:2.0</p>
+<p>$ sudo docker run –name tomcat -dit -p 8080:8080 -v /etc/localtime:/etc/localtime:ro -v /home/pi/developer/websoft:/usr/local/soft/tomcat/webapps -v /mnt/data:/mnt/data -v /mnt/usb/movie:/mnt/usb/movie tomcat-gysg:9.1.arm</p>
+</blockquote>
+</li>
+<li><p>启动MySQL数据库：</p>
+<blockquote>
+<p>$ sudo docker run -p 3306:3306 –name mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql:8.0.20</p>
+</blockquote>
+</li>
+<li><p>启动图形化管理界面：</p>
+<blockquote>
+<p>$ docker run –restart=always -d –name portainerUI -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer</p>
+</blockquote>
+</li>
+<li><p>Nginx启动：</p>
+<blockquote>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt; docker run --detach \</span><br><span class="line">&gt;   --name nginx \</span><br><span class="line">&gt;   -p <span class="number">443</span>:<span class="number">443</span>\</span><br><span class="line">&gt;   -p <span class="number">80</span>:<span class="number">80</span> \</span><br><span class="line">&gt;   -v /nginx/data:<span class="regexp">/usr/</span>share/nginx/html:rw\</span><br><span class="line">&gt;   -v /nginx/config/nginx.conf:<span class="regexp">/etc/</span>nginx/nginx.conf/:rw\</span><br><span class="line">&gt;   -v /nginx/config/conf.d/<span class="keyword">default</span>.conf:<span class="regexp">/etc/</span>nginx/conf.d/<span class="keyword">default</span>.conf:rw\</span><br><span class="line">&gt;   -v /nginx/logs:<span class="regexp">/var/</span>log/nginx/:rw\</span><br><span class="line">&gt;   -v /nginx/ssl:<span class="regexp">/ssl/</span>:rw\</span><br><span class="line">&gt;   -d nginx</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>Jenkins启动：</p>
+<ol>
+<li><p>创建一个jenkins目录  </p>
+<blockquote>
+<p>$ mkdir /home/jenkins_home;</p>
+</blockquote>
+</li>
+<li><p>启动一个jenkins容器    </p>
+<blockquote>
+<p>$ sudo docker run -d –name jenkins -p 9100:8080 -p 50000:50000 -v /home/gysg/developer/jenkins:/var/jenkins_home -v /home/gysg/developer/android-sdk:/var/android-sdk  jenkins/jenkins:lts</p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ol>
+</div><div class="tags"></div><div class="post-share"></div><div class="post-nav"><a href="/2020/05/20/13/" class="pre">构建多平台 Docker 镜像</a><a href="/2018/10/26/11/" class="next">树莓派系统的备份与还原</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker容器操作"><span class="toc-text">Docker容器操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CentOS-8中安装Docker"><span class="toc-text">CentOS 8中安装Docker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CentOS-8中安装Docker出现和Podman冲突"><span class="toc-text">CentOS 8中安装Docker出现和Podman冲突</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker下安装图形化工具"><span class="toc-text">Docker下安装图形化工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker下安装MySQL8"><span class="toc-text">Docker下安装MySQL8</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker下安装Tomcat"><span class="toc-text">Docker下安装Tomcat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#给运行中Docker容器安装SSH服务"><span class="toc-text">给运行中Docker容器安装SSH服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker下DNS解析出错的处理"><span class="toc-text">Docker下DNS解析出错的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改容器配置文件，重启docker服务"><span class="toc-text">修改容器配置文件，重启docker服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker的备份与还原"><span class="toc-text">Docker的备份与还原</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker报错日常docker-Error-response-from-daemon"><span class="toc-text">Docker报错日常docker: Error response from daemon:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker镜像无法删除的问题"><span class="toc-text">Docker镜像无法删除的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker下执行构建命令"><span class="toc-text">Docker下执行构建命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker下创建kms服务器"><span class="toc-text">Docker下创建kms服务器</span></a></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/05/21/14/">OpenMediaVault安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/05/20/13/">构建多平台 Docker 镜像</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/05/20/12/">Centos8安装Docker</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/26/11/">树莓派系统的备份与还原</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/23/10/">Linux下使用Vi时方向键变乱码、删除键不能使用的解决方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/23/9/">树莓派服务器配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/16/8/">Windows下MySQL解压版安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/19/7/">CentOS 7 下配置IP、SSH、MySQL</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/16/6/">Ubuntu下配置SSH登录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/16/4/">Ubuntu下安装jdk并配置环境变量</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/">CentOS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Ubuntu/">Ubuntu</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/omv/">omv</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/raspberry/">raspberry</a><span class="category-list-count">2</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="https://www.baidu.com/" title="百度一下" target="_blank">百度一下</a><ul></ul><a href="https://weibo.com/" title="微博热点" target="_blank">微博热点</a><ul></ul><a href="https://gywfnh.github.io/" title="个人博客" target="_blank">个人博客</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy 2013-2018 <a href="/." rel="nofollow">GYSG.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://gywfnh.github.io"> GyWfnh.</a></span></p></div></div></div><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script></body></html>
