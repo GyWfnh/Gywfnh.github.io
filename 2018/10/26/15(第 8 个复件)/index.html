@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="自己搭窝自己住"><title>树莓派系统的备份与还原 | 没事瞎折腾</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">树莓派系统的备份与还原</h1><a id="logo" href="/.">没事瞎折腾</a><p class="description">能学多少是多少，学到就是赚到</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">树莓派系统的备份与还原</h1><div class="post-meta"><a href="/2018/10/26/15(第 8 个复件)/#comments" class="comment-count"></a><p><span class="date">Oct 26, 2018</span><span><a href="/categories/raspberry/" class="category">raspberry</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><h2 id="树莓派系统的备份与还原"><a href="#树莓派系统的备份与还原" class="headerlink" title="树莓派系统的备份与还原"></a>树莓派系统的备份与还原</h2><p>树莓派使用SD卡来安装系统，如果SD卡丢失或者损坏，那么树莓派上的数据都会丢失，所以一定要备份好SD卡。这篇文章可以帮你备份你的树莓派系统。主要内容为备份SD卡，制作树莓派系统镜像以及在需要的时候还原备份的方法。</p>
+<h4 id="一、准备工作"><a href="#一、准备工作" class="headerlink" title="一、准备工作"></a>一、准备工作</h4><pre><code>1、一台linux PC
+
+2、树莓派SD卡
+
+3、读卡器
+</code></pre><h4 id="二、备份树莓派"><a href="#二、备份树莓派" class="headerlink" title="二、备份树莓派"></a>二、备份树莓派</h4><p>方法一：</p>
+<p>如果你没有运行Linux 的电脑，通过windows也可以备份，只不过这种方法备份下来的文件比较大，SD卡容量多大，则备份文件多大。</p>
+<p>首先将SD卡通过读卡器插入电脑，打开 win32diskimager ，输入镜像名 raspberry.img ，点击读，即可将树莓派SD卡文件转为镜像。</p>
+<p>这种方法制作的镜像文件巨大，而且在还原的时候必须使用比镜像更大容量的SD卡，造成种种不方便。这种情况下我们可以选择方法二。</p>
+<p>方法二：</p>
+<ol>
+<li><p>挂载SD卡</p>
+<p> 如果在Ubuntu环境下，SD卡会自动进行挂载，我们可以直接进行第2步。</p>
+<p> 自动挂载的情况下，使用  df -h 命令可以查看SD卡，如/dev/sdb1 /dev/sdb2 就是树莓派的SD卡，其中60M的分区sdb1是boot分区，15G的分区sdb2是树莓派的系统文件分区。</p>
+<p> 如果使用Centos或者其他linux操作系统，未自动挂载SD卡，我们则需要手动进行挂载。</p>
+<p> 使用以下命令进行挂载：</p>
+<pre><code>$ cd /media
+
+$ sudo mkdir sdc1 sdc2
+
+$ sudo mount /dev/sdc1 /media/sdc1
+
+$  sudo mount /dev/sdc2 /media/sdc2
+</code></pre><p><br><br> 挂载完成后如下图中所示。</p>
+</li>
+<li><p>备份SD卡</p>
+<p> 使用 dd 命令可以直接备份SD卡。比如树莓派的SD卡的路径是 /dev/sdc1 和 /dev/sdc2 ，所以备份整个SD卡的路径就是 /dev/sdc。</p>
+<p> 输入备份命令：</p>
+<pre><code>$ sudo dd if=/dev/sdc | gzip&gt;/home/lixinxing/raspberry.gz
+</code></pre><p><br><br> 其中备份文件要保存的位置、文件名和 SD卡的路径要根据实际选择。</p>
+<p> 这个命令可以在备份的同时压缩镜像大小，压缩完成后镜像有6.7G.</p>
+</li>
+</ol>
+<h4 id="三、将树莓派镜像还原"><a href="#三、将树莓派镜像还原" class="headerlink" title="三、将树莓派镜像还原"></a>三、将树莓派镜像还原</h4><p>备份完成后，如果需要还原树莓派，我们可以通过以下方法进行。</p>
+<ul>
+<li><p>方法一：</p>
+<p>  在windows环境下，将备份文件解压，然后使用 win32diskimager  将备份文件写入到新的SD卡。</p>
+</li>
+<li><p>方法二：</p>
+<p>  在linux环境下，使用以下步骤将备份文件写入到SD卡。</p>
+<pre><code>1. 删除SD卡分区。
+
+    使用 fdisk 命令对SD卡格式化
+
+2. 写入备份文件
+
+    $ sudo gzip -dc /home/lixinxing/raspberry.gz | sudo dd of=/dev/sdc
+</code></pre><p><br><br>  其中备份文件的位置、文件名和 SD卡的路径要根据实际选择。</p>
+<p>  这样就将备份还原到树莓派了，可以将SD卡插入树莓派启动！</p>
+</li>
+</ul>
+<p><br><br>转载原帖：<a href="http://blog.lxx1.com/1450" target="_blank" rel="noopener">制作树苺派SD卡备份镜像——树苺派系统备份与还原指南</a></p>
+</div><div class="tags"></div><div class="post-share"></div><div class="post-nav"><a href="/2018/10/26/15(第 6 个复件)/" class="pre">树莓派系统的备份与还原</a><a href="/2018/10/26/15(第 21 个复件)/" class="next">树莓派系统的备份与还原</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#树莓派系统的备份与还原"><span class="toc-text">树莓派系统的备份与还原</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一、准备工作"><span class="toc-text">一、准备工作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二、备份树莓派"><span class="toc-text">二、备份树莓派</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#三、将树莓派镜像还原"><span class="toc-text">三、将树莓派镜像还原</span></a></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/10/26/15(第 13 个复件)/">树莓派系统的备份与还原</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/26/15(第 9 个复件)/">树莓派系统的备份与还原</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/26/15(第 5 个复件)/">树莓派系统的备份与还原</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/26/15(第 7 个复件)/">树莓派系统的备份与还原</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/26/15(第 6 个复件)/">树莓派系统的备份与还原</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/26/15(第 8 个复件)/">树莓派系统的备份与还原</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/26/15(第 21 个复件)/">树莓派系统的备份与还原</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/26/15(第 3 个复件)/">树莓派系统的备份与还原</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/26/15(第 20 个复件)/">树莓派系统的备份与还原</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/26/15(第 4 个复件)/">树莓派系统的备份与还原</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/">CentOS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Ubuntu/">Ubuntu</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/raspberry/">raspberry</a><span class="category-list-count">27</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="https://www.baidu.com/" title="百度一下" target="_blank">百度一下</a><ul></ul><a href="https://weibo.com/" title="微博热点" target="_blank">微博热点</a><ul></ul><a href="https://gywfnh.github.io/" title="个人博客" target="_blank">个人博客</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy 2013-2018 <a href="/." rel="nofollow">GYSG.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://gywfnh.github.io"> GyWfnh.</a></span></p></div></div></div><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script></body></html>
